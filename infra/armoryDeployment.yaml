@@ -1,0 +1,22 @@
+version: v1
+kind: kubernetes
+application: my-application
+targets:
+  staging:
+    account: staging
+    namespace: staging-namespace
+    strategy: myCanary
+
+manifests:
+  - path: applications/manifests
+
+strategies:
+  myCanary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 50
+        - pause:
+            untilApproved: true
+        - setWeight:
+            weight: 100
